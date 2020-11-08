@@ -37,6 +37,7 @@ class BERTdataset:
         token_type_ids = inputs['token_type_ids']
         
         # we could have done padding  as parametar in encode_plus but lets act fancy
+        # padding must be done to the right side
         padding_length = self.max_length - len(input_ids)
         
         input_ids = input_ids + ([0] * padding_length)

@@ -9,7 +9,7 @@ from sklearn import metrics
 import numpy as np
 from transformers import AdamW
 from transformers import get_linear_schedule_with_warmup
-# main function for training
+# main function for training and evaluation
 def main():
     
     dataframe = pd.read_csv('../input/imdb.csv') # load dataframe
@@ -59,8 +59,8 @@ def main():
     
     device = torch.device('cuda')
     model = model.BERTsentiment()
-    model.to(device)
-    
+    model.to(device) # move model to cuda device 
+    # params to optimize 
     param_optimizer = list(model.named_parameters())
     no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
     optimizer_parameters = [
@@ -68,7 +68,7 @@ def main():
         {'params': [p for n, p in param_optimizer if  any(nd in n for nd in no_decay)], 'weight_decay': 0.00}
     ]
     
-    number_of_training_steps = int(len(df_train) / config.TRAINING_BATCH_SIZE * config.EPOCHS)
+    number_of_training_steps = int(len(df_train) / config.TRAINING_BATCH_SIZE * config.EPOCHS) 
     #AdamW focuses on regularization and model does better on  generalization
     optimizer = AdamW(
         params = param_optimizer,
@@ -104,11 +104,12 @@ def main():
         print('ACCURACY SCORE',{accuracy})
         
         if accuracy > best_accuracy:
-            torch.save(model.state_dict(), config.MODEL_PATH)
+            torch.save(model.state_dict(), config.MODEL_PATH) # save model in working dir
             best_accuracy = accuracy
+
             
             
 
             
-if __name__ == '__main__':
+if __name__ == '__main__': # call function
     main()

@@ -9,7 +9,6 @@ BERT_PATH = '../input/bert-base-uncased/'
 MODEL_PATH = 'model.bin'
 # Bert tokenizer is WorldPiece tokenizer
 TOKENIZER = transformers.BertTokenizer.from_pretrained(
-    vocab_file = BERT_PATH,
+    pretrained_model_name_or_path= BERT_PATH,
     do_lower_case = True
 )
-
